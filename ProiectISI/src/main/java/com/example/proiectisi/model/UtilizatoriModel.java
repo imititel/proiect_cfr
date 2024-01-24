@@ -1,9 +1,7 @@
 package com.example.proiectisi.model;
-import com.example.proiectisi.dao.UtilizatoriDAO;
 import java.util.HashMap;
 import java.util.Map;
-import java.sql.SQLException;
-import java.lang.ClassNotFoundException;
+
 
 import java.io.Serializable;
 
@@ -65,7 +63,6 @@ public class UtilizatoriModel implements Serializable {
     
     
     public String getUserType() {
-        System.out.println("codul este " + this.codf);
         // Verificați dacă codf există în map și returnați tipul de utilizator corespunzător
         if (codfToUserType.containsKey(this.codf)) {
             return codfToUserType.get(this.codf);
@@ -73,25 +70,5 @@ public class UtilizatoriModel implements Serializable {
             return "Unknown";
         }
     }
-   /* public String getUserType() {
-    	System.out.println(this.getCodf()); // Add this line to check the value of codf
-        try {
-            // Verificați dacă codf există și este diferit de null
-            if (this.getCodf() != null) {
-                UtilizatoriDAO utilizatoriDAO = new UtilizatoriDAO();
-                return utilizatoriDAO.getUserType(this.getCodf());
-            } else {
-                return "Unknown";
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return "Unknown";
-        } catch (ClassNotFoundException e) {
-        
-            e.printStackTrace();
-            return "Unknown";
-        }
-    }
-*/
  
 }

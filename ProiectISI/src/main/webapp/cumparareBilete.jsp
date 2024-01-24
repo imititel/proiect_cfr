@@ -168,7 +168,7 @@
     <h2>Mers tren trafic intern</h2>
 
     <div class="search-form">
-        <form action="SearchBiletServlet" method="get">
+        <form action="cautareBilete" method="get">
             <label for="from">De la:</label>
             <input type="text" id="from" name="from"><br>
 
