@@ -198,7 +198,7 @@ if (username != null && password != null && codf != null) {
     
     if (usernameTaken) {
         // Username is already taken, display an error message
-        response.sendRedirect("error.jsp?message=Username already taken");
+        response.sendRedirect("user_already_taken.jsp?message=Username already taken");
         logger.warning("<p>Username already taken.</p>");
     } else {
         // Insert the new user
@@ -250,20 +250,19 @@ if (username != null && password != null && codf != null) {
     <style>
         /* Stilurile CSS pentru buton */
         .logout-button {
-            background-color: #ff0000; /* Culoarea de fundal */
-            color: #ffffff; /* Culoarea textului */
-            padding: 10px 20px; /* Spațierea în interiorul butonului */
-            border: none; /* Fără bordură */
-            border-radius: 5px; /* Colțuri rotunjite */
-            cursor: pointer; /* Indicator de cursor la hover */
+            background-color: #ff0000;
+            color: #ffffff; 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 5px;
+            cursor: pointer; 
             position: absolute;
-            top: 10px; /* Distanța de la partea de sus a paginii */
-            right: 10px; /* Distanța de la partea dreaptă a paginii */
+            top: 10px;
+            right: 10px; 
         }
 
-        /* Stilul butonului la hover (când mouse-ul este deasupra butonului) */
         .logout-button:hover {
-            background-color: #cc0000; /* Schimbarea culorii de fundal */
+            background-color: #cc0000;
         }
     </style>
 </head>

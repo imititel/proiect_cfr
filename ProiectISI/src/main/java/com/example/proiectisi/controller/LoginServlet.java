@@ -54,7 +54,7 @@ public class LoginServlet extends HttpServlet {
                         response.sendRedirect("manager.jsp");
                         break;
                     case 2: // Personal bilete
-                        response.sendRedirect("bilete.jsp");
+                        response.sendRedirect("cumparareBilete.jsp");
                         break;
                     case 3: // Clienți bilete
                         response.sendRedirect("cumparareBilete.jsp");
