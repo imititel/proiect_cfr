@@ -24,8 +24,8 @@
 %>
 <form id="main">
     <div class = "login">
-        <img src="${pageContext.request.contextPath}/assets/img/err.png" alt="err logo" width="200" height="200">
-        <h1 id="title">Utilizator neconfigurat!</h1>
+        <img src="${pageContext.request.contextPath}/assets/img/user_already_taken.png" alt="user_already logo" width="200" height="200">
+        <h1 id="title">Utilizator existent!</h1>
         <a href="${pageContext.request.contextPath}/index.jsp">Inapoi la Log In</a>
     </div>
 </form>
