@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.proiectisi.model.TrenModel" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -57,26 +59,18 @@
             </tr>
         </thead>
         <tbody>
-            <%
-            List<TrenModel> trenuri = (List<TrenModel>) request.getAttribute("trenuri");
-            if (trenuri != null && !trenuri.isEmpty()) {
-                for (TrenModel tren : trenuri) {
-            %>
-                    <tr>
-                        <td><%= tren.getNume() %></td>
-                        <td><%= tren.getOraPlecare() %></td>
-                        <td><%= tren.getDurata() %></td>
-                    </tr>
-            <%
-                }
-            } else {
-            %>
+            <c:forEach var="tren" items="${trenuri}">
+                <tr>
+                    <td>${tren.getNume()}</td>
+                    <td>${tren.getOraPlecare()}</td>
+                    <td>${tren.getDurata()}</td>
+                </tr>
+            </c:forEach>
+            <c:if test="${empty trenuri}">
                 <tr>
                     <td colspan="3">Nu există trenuri disponibile pentru criteriile selectate.</td>
                 </tr>
-            <%
-            }
-            %>
+            </c:if>
         </tbody>
     </table>
 </div>

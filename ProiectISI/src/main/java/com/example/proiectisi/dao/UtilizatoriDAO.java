@@ -146,5 +146,4 @@ public class UtilizatoriDAO {
         
         return false;
     }
-   
 }

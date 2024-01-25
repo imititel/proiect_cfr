@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.*,com.example.proiectisi.model.BiletModel,com.example.proiectisi.dao.BiletDAO" %>
 <%@ page import="java.util.*,java.text.SimpleDateFormat" %>
+<%@ page import="java.util.Date" %>
 <html>
 <head>
     <title>Bilete CFR</title>
@@ -162,29 +163,27 @@
 
 <div class="container">
     <header>
-        <!-- Restul header-ului... -->
     </header>
 
     <h2>Mers tren trafic intern</h2>
 
     <div class="search-form">
-        <form action="cautareBilete" method="get">
-            <label for="from">De la:</label>
-            <input type="text" id="from" name="from"><br>
+    <form action="cautareBilete" method="get">
+        <label for="from">De la:</label>
+        <input type="text" id="from" name="from"><br>
 
-            <label for="to">Până la:</label>
-            <input type="text" id="to" name="to"><br>
+        <label for="to">Până la:</label>
+        <input type="text" id="to" name="to"><br>
 
-            <button type="button" onclick="swapValues()">Inversează</button><br><br>
+        <button type="button" onclick="swapValues()">Inversează</button><br><br>
 
-            <label for="dataPlecare">Data plecare:</label>
-            <input type="date" id="dataPlecare" name="dataPlecare" value="<%= new SimpleDateFormat("yyyy-MM-dd").format(new Date()) %>"><br><br>
+        <label for="dataPlecare">Data plecare (yyyy-MM-dd):</label>
+		<input type="text" id="dataPlecare" name="dataPlecare" pattern="\d{4}-\d{2}-\d{2}" placeholder="yyyy-MM-dd"><br><br>
 
-            <input type="submit" value="Caută">
-        </form>
-    </div>
+        <input type="submit" value="Caută">
+    </form>
+	</div>
 </div>
-
 <div class="cookie-warning" id="cookie-warning">
     Acest site folosește cookies. <button onclick="hideCookieWarning()">Am înțeles</button>
 </div>
