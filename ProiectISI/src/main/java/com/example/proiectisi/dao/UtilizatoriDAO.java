@@ -49,16 +49,20 @@ public class UtilizatoriDAO {
     }
 
     public boolean validate(UtilizatoriModel utilizatoriModel) throws ClassNotFoundException, SQLException {
-        boolean status;
+        boolean status = false;
 
-         PreparedStatement preparedStatement = dataSource.getConnection()
-                 .prepareStatement("SELECT * FROM utilizatori WHERE username = ? AND password = ?;");
-        preparedStatement.setString(1, utilizatoriModel.getUsername());
-        preparedStatement.setString(2, utilizatoriModel.getPassword());
-        System.out.println("User validated utilizatoriModel");
-        System.out.println(preparedStatement);
-        ResultSet rs = preparedStatement.executeQuery();
-        status = rs.next();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM utilizatori WHERE username = ? AND password = ?;")) {
+            
+            preparedStatement.setString(1, utilizatoriModel.getUsername());
+            preparedStatement.setString(2, utilizatoriModel.getPassword());
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                // Verifică dacă resultSet are o înregistrare
+                status = resultSet.next();
+            }
+        }
+        
         return status;
     }
 
