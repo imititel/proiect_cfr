@@ -17,13 +17,13 @@ public class CautaTrenuriServlet extends HttpServlet {
    
 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         CriteriiCautareTrenModel criterii = new CriteriiCautareTrenModel();
-        criterii.setDeLa(request.getParameter("deLa"));
-        criterii.setPanaLa(request.getParameter("panaLa"));
-        criterii.setData(request.getParameter("data"));
+        criterii.setDeLa(request.getParameter("from"));
+        criterii.setPanaLa(request.getParameter("to"));
+        criterii.setData(request.getParameter("departure"));
      
-        System.out.println("deLa: " + criterii.getDeLa());
-        System.out.println("panaLa: " + criterii.getPanaLa());
-        System.out.println("data: " + criterii.getData());
+        System.out.println("from: " + criterii.getDeLa());
+        System.out.println("to: " + criterii.getPanaLa());
+        System.out.println("departure: " + criterii.getData());
         
         if (criterii.getData() == null || criterii.getData().trim().isEmpty()) {
             System.err.println("Data călătoriei nu a fost furnizată.");

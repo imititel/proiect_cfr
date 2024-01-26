@@ -30,7 +30,7 @@ public class TrenDAO {
     public List<TrenModel> cautaTrenuri(String deLa, String panaLa, String data) {
         List<TrenModel> trenuri = new ArrayList<>();
         
-        String sql = "SELECT * FROM trenuri WHERE statie_plecare = ? AND statie_sosire = ? AND data = ?";
+        String sql = "SELECT * FROM trenuri WHERE statie_plecare = ? AND statie_sosire = ? AND data >= ?";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
