@@ -55,7 +55,7 @@ public class UtilizatoriDAO {
                  .prepareStatement("SELECT * FROM utilizatori WHERE username = ? AND password = ?;");
         preparedStatement.setString(1, utilizatoriModel.getUsername());
         preparedStatement.setString(2, utilizatoriModel.getPassword());
-
+        System.out.println("User validated utilizatoriModel");
         System.out.println(preparedStatement);
         ResultSet rs = preparedStatement.executeQuery();
         status = rs.next();

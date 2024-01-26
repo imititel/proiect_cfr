@@ -38,12 +38,19 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String user = request.getParameter("user");
         String parola = request.getParameter("parola");
+        
+        if (user == null || user.trim().isEmpty() || parola == null || parola.trim().isEmpty()) {
+            response.sendRedirect("index.jsp?error=empty");
+            return;
+        }
+        
         UtilizatoriModel utilizatoriModel = new UtilizatoriModel();
         utilizatoriModel.setUsername(user);
         utilizatoriModel.setPassword(parola);
 
         try {
             if (utilizatoriDAO.validate(utilizatoriModel)) {
+            	System.out.println("User validated successfully");
                 HttpSession session = request.getSession();
                 session.setAttribute("user", user);
                 logsDAO.logsConnect(session.getAttribute("user"), true, session.getId());
@@ -57,7 +64,7 @@ public class LoginServlet extends HttpServlet {
                         response.sendRedirect("cumparareBilete.jsp");
                         break;
                     case 3: // Clienți bilete
-                        response.sendRedirect("cumparareBilete.jsp");
+                        response.sendRedirect("bilete.jsp");
                         break;
                     default:
                         response.sendRedirect("error.jsp");

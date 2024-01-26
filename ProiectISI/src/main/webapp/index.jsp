@@ -68,11 +68,13 @@
     <h1>Cumpără bilete de tren online</h1>
     <img src="assets/img/cfr_romania.png" alt="logo cfr" width="200" height="200">
 
-    <form class="login-form" id="main" method="post" action="${pageContext.request.contextPath}/login">
+    <!-- Login form starts here -->
+     <form class="login-form" id="main" method="post" action="${pageContext.request.contextPath}/login">
         <input name="user" id="user" type="text" placeholder="Introduceți numele de utilizator">
         <input name="parola" id="parola" type="password" placeholder="Introduceți parola">
         <input type="submit" name="submit" value="Autentificare">
     </form>
+    <!-- Login form ends here -->
 
     <input name="remember" id="remember" type="checkbox" value="Tine minte username-ul">
     <label for="remember">Ține minte numele de utilizator</label>
