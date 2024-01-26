@@ -10,6 +10,11 @@
 <html>
 <head>
     <title>Loguri</title>
+    <style>
+	.hiddenRow {
+    	display: none;
+	}
+	</style>
 </head>
 <body>
 <%
@@ -99,9 +104,9 @@
         e.getStackTrace();
     }
     %>
-    <tr class='notFound' hidden>
-        <td colspan='7'>Nu s-au gasit inregistrari!</td>
-    </tr>
+    <tr class='notFound hiddenRow'>
+    <td colspan='10'>Nu s-au gasit inregistrari!</td>
+	</tr>
     </tbody>
 </table>
 </body>

@@ -48,14 +48,15 @@ public class LoginServlet extends HttpServlet {
         utilizatoriModel.setUsername(user);
         utilizatoriModel.setPassword(parola);
 
-        try {
+        try {            
             if (utilizatoriDAO.validate(utilizatoriModel)) {
-            	System.out.println("User validated successfully");
                 HttpSession session = request.getSession();
-                session.setAttribute("user", user);
+                session.setAttribute("user", utilizatoriModel.getUsername());
+
                 logsDAO.logsConnect(session.getAttribute("user"), true, session.getId());
 
-                int codf = utilizatoriDAO.getCodf(user);
+                int codf = utilizatoriDAO.getCodf(utilizatoriModel.getUsername());
+
                 switch (codf) {
                     case 1: // Manager
                         response.sendRedirect("manager.jsp");
@@ -70,12 +71,9 @@ public class LoginServlet extends HttpServlet {
                         response.sendRedirect("error.jsp");
                 }
             } else {
-                // Redirecționează la error.jsp pentru erorile de autentificare
                 response.sendRedirect("error.jsp");
             }
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-            // Redirecționează la error.jsp și pentru alte excepții
             response.sendRedirect("error.jsp");
         }
     }

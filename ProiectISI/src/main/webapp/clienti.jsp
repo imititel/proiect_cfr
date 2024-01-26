@@ -9,6 +9,11 @@
 <html>
 <head>
     <title>Clienti</title>
+     <style>
+        .hiddenRow {
+            display: none;
+        }
+    </style>
 </head>
 <body>
 <%
@@ -165,9 +170,9 @@
         System.out.println(e.getMessage());
         e.getStackTrace();
     } %>
-    <tr class='notFound' hidden>
-        <td colspan='10'>Nu s-au gasit inregistrari!</td>
-    </tr>
+    <tr class='notFound hiddenRow'>
+    <td colspan='10'>Nu s-au gasit inregistrari!</td>
+	</tr>
     </tbody>
 </table>
 
