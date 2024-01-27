@@ -2,10 +2,10 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.proiectisi.model.TrenModel" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <title>Rezultate Căutare Trenuri</title>
     <style>
         body {
@@ -40,8 +40,8 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
-        h1 {
-            text-align: center;
+        .selected {
+         	background-color: #a0d2eb;
         }
     </style>
 </head>
@@ -53,27 +53,102 @@
     <table>
         <thead>
             <tr>
+                <th>Număr Tren</th>
                 <th>Nume Tren</th>
                 <th>Ora de Plecare</th>
                 <th>Durata Călătoriei</th>
+                <th>Loc</th>
+                <th>Clasă</th>
+                <th>Preț</th>
+                <th>Selectează</th>
             </tr>
         </thead>
         <tbody>
             <c:forEach var="tren" items="${trenuri}">
                 <tr>
+                    <td>${tren.getNumarTren()}</td>
                     <td>${tren.getNume()}</td>
                     <td>${tren.getOraPlecare()}</td>
                     <td>${tren.getDurata()}</td>
+                    <td>${tren.getLoc()}</td>
+                    <td>${tren.getClasa()}</td>
+                    <td>${tren.getPret()}</td>
+					<td><input type="checkbox" name="selectTren" value="${tren.getNumarTren()}" onclick="selectTren(this.value, this.checked)"></td>
                 </tr>
             </c:forEach>
             <c:if test="${empty trenuri}">
                 <tr>
-                    <td colspan="3">Nu există trenuri disponibile pentru criteriile selectate.</td>
+                    <td colspan="8">Nu există trenuri disponibile pentru criteriile selectate.</td>
                 </tr>
             </c:if>
         </tbody>
     </table>
+    <button type="button" onclick="exportaSiPrinteaza()">Exportă și Printează</button>
 </div>
+
+<script>
+var trenSelectatId = null;
+
+function selectTren(idTren, isChecked) {
+    if (isChecked) {
+        trenSelectatId = idTren;
+    } else {
+        trenSelectatId = null;
+    }
+}
+
+function exportaSiPrinteaza() {
+    console.log("xxxxxxxxxxxxxxx");
+    if (trenSelectatId) {
+        var locul = "";
+        var clasa = ""; 
+        var pret = "";
+
+        // Exemplu de conexiune la baza de date și interogare
+        var xhr = new XMLHttpRequest();
+        console.log("yyyyyyyyyyy");
+        xhr.open('GET', 'obtine_date_tren?id=' + trenSelectatId, false);
+        xhr.send();
+
+        if (xhr.status === 200) {
+             console.log("yyyyyyyyyyy");
+            var response = JSON.parse(xhr.responseText);
+            locul = response.loc;
+            clasa = response.clasa;
+            pret = response.pret;
+            console.log(xhr.status)
+            console.log(xhr.responseText)
+            console.log(locul)
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Restul codului pentru generarea PDF-ului folosind valorile obținute din baza de date
+
+            // Adaugă titlul
+            doc.setFontSize(16);
+            doc.text('Bilet Tren', 105, 20, null, null, 'center');
+
+            // Adaugă detaliile trenului
+            doc.setFontSize(12);
+            doc.text('Număr Tren: ' + trenSelectatId, 20, 30);
+
+            // Adaugă detalii personalizate din baza de date
+            doc.text('Loc: ' + locul, 20, 70);
+            doc.text('Clasă: ' + clasa, 20, 80);
+            doc.text('Preț: ' + pret + ' Lei', 20, 90);
+
+            // Salvează PDF-ul
+            doc.save('bilet_tren.pdf');
+        } else {
+            alert('Nu s-au putut obține informațiile din baza de date.');
+        }
+    } else {
+        alert('Vă rugăm să selectați un tren mai întâi.');
+    }
+}
+
+
+</script>
 
 </body>
 </html>

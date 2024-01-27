@@ -2,29 +2,27 @@ package com.example.proiectisi.controller;
 
 import com.example.proiectisi.dao.TrenDAO;
 import com.example.proiectisi.model.TrenModel;
-import com.example.proiectisi.model.CriteriiCautareTrenModel ;
+import com.example.proiectisi.model.CriteriiCautareTrenModel;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
-
 @WebServlet(name = "cautaTrenuri", value = "/cautaTrenuri")
 public class CautaTrenuriServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-   
-protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
         CriteriiCautareTrenModel criterii = new CriteriiCautareTrenModel();
         criterii.setDeLa(request.getParameter("from"));
         criterii.setPanaLa(request.getParameter("to"));
         criterii.setData(request.getParameter("departure"));
-     
+
         System.out.println("from: " + criterii.getDeLa());
         System.out.println("to: " + criterii.getPanaLa());
         System.out.println("departure: " + criterii.getData());
-        
+
         if (criterii.getData() == null || criterii.getData().trim().isEmpty()) {
             System.err.println("Data călătoriei nu a fost furnizată.");
             return; 
@@ -33,7 +31,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
         TrenDAO trenDAO = new TrenDAO();
         try {
             List<TrenModel> trenuri = trenDAO.cautaTrenuri(criterii.getDeLa(), criterii.getPanaLa(), criterii.getData());
-            
+
             System.out.println("Număr de trenuri găsite: " + trenuri.size());
 
             request.setAttribute("trenuri", trenuri);

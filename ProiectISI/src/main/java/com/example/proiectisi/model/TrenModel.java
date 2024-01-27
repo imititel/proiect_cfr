@@ -2,20 +2,43 @@ package com.example.proiectisi.model;
 import java.time.LocalDate; 
 
 public class TrenModel {
+    private int trenId;
+    private String numarTren;
     private String nume;
     private String oraPlecare;
     private String durata;
     private String statiePlecare;
     private String statieSosire;
     private LocalDate data;
+    private String loc;
+    private String clasa;
+    private double pret;
 
-    public TrenModel(String nume, String oraPlecare, String durata) {
+    // Constructor cu toate câmpurile
+    public TrenModel(int trenId, String numarTren, String nume, String oraPlecare, 
+                     String durata, String statiePlecare, String statieSosire, 
+                     LocalDate data, String loc, String clasa, double pret) {
+        this.trenId = trenId;
+        this.numarTren = numarTren;
         this.nume = nume;
         this.oraPlecare = oraPlecare;
         this.durata = durata;
+        this.statiePlecare = statiePlecare;
+        this.statieSosire = statieSosire;
+        this.data = data;
+        this.loc = loc;
+        this.clasa = clasa;
+        this.pret = pret;
     }
 
- // Getter și setter pentru statiePlecare
+    public int getTrenId() {
+        return trenId;
+    }
+
+    public void setTrenId(int trenId) {
+        this.trenId = trenId;
+    }
+
     public String getStatiePlecare() {
         return statiePlecare;
     }
@@ -24,7 +47,6 @@ public class TrenModel {
         this.statiePlecare = statiePlecare;
     }
 
-    // Getter și setter pentru statieSosire
     public String getStatieSosire() {
         return statieSosire;
     }
@@ -33,7 +55,6 @@ public class TrenModel {
         this.statieSosire = statieSosire;
     }
     
-    // Getter și setter pentru data
     public LocalDate getData() {
         return data;
     }
@@ -42,7 +63,6 @@ public class TrenModel {
         this.data = data;
     }
     
-    // Getter și setter pentru nume
     public String getNume() {
         return nume;
     }
@@ -51,7 +71,6 @@ public class TrenModel {
         this.nume = nume;
     }
 
-    // Getter și setter pentru oraPlecare
     public String getOraPlecare() {
         return oraPlecare;
     }
@@ -60,7 +79,7 @@ public class TrenModel {
         this.oraPlecare = oraPlecare;
     }
 
-    // Getter și setter pentru durata
+
     public String getDurata() {
         return durata;
     }
@@ -69,16 +88,36 @@ public class TrenModel {
         this.durata = durata;
     }
     
-    
-    @Override
-    public String toString() {
-        return "Tren{" +
-               "nume='" + nume + '\'' +
-               ", oraPlecare='" + oraPlecare + '\'' +
-               ", durata='" + durata + '\'' +
-               ", statiePlecare='" + statiePlecare + '\'' +
-               ", statieSosire='" + statieSosire + '\'' +
-               ", data=" + data +
-               '}';
+    public String getNumarTren() {
+        return numarTren;
     }
+
+    public void setNumarTren(String numarTren) {
+        this.numarTren = numarTren;
+    }
+    
+    public String getLoc() {
+        return loc;
+    }
+
+    public void setLoc(String loc) {
+        this.loc = loc;
+    }
+
+    public String getClasa() {
+        return clasa;
+    }
+
+    public void setClasa(String clasa) {
+        this.clasa = clasa;
+    }
+
+    public double getPret() {
+        return pret;
+    }
+
+    public void setPret(double pret) {
+        this.pret = pret;
+    }
+    
 }
