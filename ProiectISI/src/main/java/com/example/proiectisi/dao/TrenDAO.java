@@ -43,23 +43,25 @@ public class TrenDAO {
                 preparedStatement.setDate(3, sqlDate);
             } catch (IllegalArgumentException e) {
                 System.err.println("Formatul datei este incorect: " + data);
-                // Aici poți trata cum crezi de cuviință această eroare, de exemplu, să continui cu o dată implicită sau să returnezi o listă goală etc.
-                return trenuri; // sau un alt mod de tratare a erorii
+                return trenuri;
             }
             
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-            	TrenModel tren = new TrenModel(rs.getString("nume"), rs.getString("ora_plecare"), rs.getString("durata"));
-                tren.setNume(rs.getString("nume"));
-                tren.setOraPlecare(rs.getTime("ora_plecare").toString()); // Converteste java.sql.Time in String
-                tren.setDurata(rs.getString("durata"));
-                tren.setStatiePlecare(rs.getString("statie_plecare"));
-                tren.setStatieSosire(rs.getString("statie_sosire"));
-                
-                // Conversia din java.sql.Date în LocalDate
-                LocalDate dataCălătoriei = rs.getDate("data").toLocalDate(); // Schimbă numele variabilei pentru a evita duplicate
-                tren.setData(dataCălătoriei);
+                TrenModel tren = new TrenModel(
+                        rs.getInt("tren_id"),
+                        rs.getString("numar_tren"),
+                        rs.getString("nume"),
+                        rs.getString("ora_plecare"),
+                        rs.getString("durata"),
+                        rs.getString("statie_plecare"),
+                        rs.getString("statie_sosire"),
+                        rs.getDate("data").toLocalDate(),
+                        rs.getString("loc"),
+                        rs.getString("clasa"),
+                        rs.getDouble("pret")
+                    );
 
                 trenuri.add(tren);
             }
@@ -70,4 +72,106 @@ public class TrenDAO {
 
         return trenuri;
     }
+    
+    
+    public TrenModel getTrenById(String trenId) {
+        TrenModel tren = null;
+        String sql = "SELECT * FROM trenuri WHERE tren_id = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, trenId);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                tren = new TrenModel(
+                	rs.getInt("tren_id"),
+                	rs.getString("numar_tren"),
+                    rs.getString("nume"),
+                    rs.getString("ora_plecare"),
+                    rs.getString("durata"),
+                    rs.getString("statie_plecare"),
+                    rs.getString("statie_sosire"),
+                    rs.getDate("data").toLocalDate(),
+                    rs.getString("loc"),
+                    rs.getString("clasa"),
+                    rs.getDouble("pret")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Tratează excepțiile
+        }
+
+        return tren;
+    }
+    
+    public List<TrenModel> getAllTrenuri() {
+        List<TrenModel> listaTrenuri = new ArrayList<>();
+        String sql = "SELECT tren_id, numar_tren, nume, ora_plecare, durata, statie_plecare, statie_sosire, data, loc, clasa, pret FROM trenuri";
+
+        try (Connection connection = dataSource.getConnection();
+        	     PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+        	    ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                TrenModel tren = new TrenModel(
+                        rs.getInt("tren_id"),
+                        rs.getString("numar_tren"),
+                        rs.getString("nume"),
+                        rs.getString("ora_plecare"),
+                        rs.getString("durata"),
+                        rs.getString("statie_plecare"),
+                        rs.getString("statie_sosire"),
+                        rs.getDate("data").toLocalDate(),
+                        rs.getString("loc"),
+                        rs.getString("clasa"),
+                        rs.getDouble("pret")
+                );
+                listaTrenuri.add(tren);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listaTrenuri;
+    }
+    
+    public TrenModel getTrenByNumar(String numarTren) {
+        TrenModel tren = null;
+        String sql = "SELECT * FROM trenuri WHERE numar_tren = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, numarTren);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                tren = new TrenModel(
+                    rs.getInt("tren_id"),
+                    rs.getString("numar_tren"),
+                    rs.getString("nume"),
+                    rs.getString("ora_plecare"),
+                    rs.getString("durata"),
+                    rs.getString("statie_plecare"),
+                    rs.getString("statie_sosire"),
+                    rs.getDate("data").toLocalDate(),
+                    rs.getString("loc"),
+                    rs.getString("clasa"),
+                    rs.getDouble("pret")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Tratează excepțiile
+        }
+
+        return tren;
+    }
+
 }
+
+   
