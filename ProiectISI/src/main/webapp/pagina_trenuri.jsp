@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.proiectisi.model.TrenModel" %>
+<%@ page import="com.example.proiectisi.controller.ObtineDateTrenServlet" %>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
@@ -98,50 +100,42 @@ function selectTren(idTren, isChecked) {
 }
 
 function exportaSiPrinteaza() {
-    console.log("xxxxxxxxxxxxxxx");
     if (trenSelectatId) {
-        var locul = "";
-        var clasa = ""; 
-        var pret = "";
-
-        // Exemplu de conexiune la baza de date și interogare
         var xhr = new XMLHttpRequest();
-        console.log("yyyyyyyyyyy");
-        xhr.open('GET', 'obtine_date_tren?id=' + trenSelectatId, false);
+        xhr.open('GET', '/ProiectISI/obtineDateTren?numar_tren=' + trenSelectatId, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                doc.setFontSize(10);
+                doc.text('ID bilet: CFR Călători', 20, 20);
+                doc.text('Preț: ' + response.pret + ' RON', 20, 30);
+                doc.text('Via:', 20, 40);
+                doc.text('Informații legitimație / Travel ticket information:', 20, 50);
+                doc.text(response.deLa + ' - ' + response.panaLa, 20, 60);
+                doc.text('Data: ' + response.data, 20, 70);
+                doc.text('Ora Plecare: ' + response.oraPlecare + ' Ora Sosire: ' + response.oraSosire, 20, 80);
+                doc.text('Tren: ' + response.numarTren, 20, 90);
+                doc.text('Nume călător: ' + response.numeCalator, 20, 100);
+                doc.text('Clasa: ' + response.clasa, 20, 110);
+                doc.text('Tip: ' + response.tip, 20, 120);
+                doc.text('Adulți/Adults: ' + response.adulti, 20, 130);
+                doc.text('Total de plată / Total amount: ' + response.totalPlata + ' RON', 20, 140);
+                doc.text('Valabilă la trenurile / Valid for: ' + response.validPentru, 20, 150);
+                doc.text('Data cumpărării/Buy date: ' + response.dataCumpararii, 20, 160);
+                doc.text('Legendă/Legend:', 20, 170);
+                doc.text('din care TVA / VAT 19%: ' + response.tva + ' RON', 20, 180);
+                // Continuați să adăugați restul informațiilor necesare
+
+                doc.save('bilet_tren.pdf');
+            } else if (xhr.readyState === 4 && xhr.status !== 200) {
+                console.error("Eroare la încărcarea datelor de la server");
+            }
+        };
         xhr.send();
-
-        if (xhr.status === 200) {
-             console.log("yyyyyyyyyyy");
-            var response = JSON.parse(xhr.responseText);
-            locul = response.loc;
-            clasa = response.clasa;
-            pret = response.pret;
-            console.log(xhr.status)
-            console.log(xhr.responseText)
-            console.log(locul)
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            // Restul codului pentru generarea PDF-ului folosind valorile obținute din baza de date
-
-            // Adaugă titlul
-            doc.setFontSize(16);
-            doc.text('Bilet Tren', 105, 20, null, null, 'center');
-
-            // Adaugă detaliile trenului
-            doc.setFontSize(12);
-            doc.text('Număr Tren: ' + trenSelectatId, 20, 30);
-
-            // Adaugă detalii personalizate din baza de date
-            doc.text('Loc: ' + locul, 20, 70);
-            doc.text('Clasă: ' + clasa, 20, 80);
-            doc.text('Preț: ' + pret + ' Lei', 20, 90);
-
-            // Salvează PDF-ul
-            doc.save('bilet_tren.pdf');
-        } else {
-            alert('Nu s-au putut obține informațiile din baza de date.');
-        }
     } else {
         alert('Vă rugăm să selectați un tren mai întâi.');
     }

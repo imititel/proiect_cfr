@@ -11,4 +11,12 @@
 		<servlet-name>CautaTrenuriServlet</servlet-name>
 		<url-pattern>/cautareBilete</url-pattern>
 	</servlet-mapping>
+	<servlet>
+    	<servlet-name>ObtineDateTrenServlet</servlet-name>
+    	<servlet-class>com.example.proiectisi.controller.ObtineDateTrenServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+    	<servlet-name>ObtineDateTrenServlet</servlet-name>
+    	<url-pattern>/obtineDateTren</url-pattern>
+	</servlet-mapping>	
 </web-app>

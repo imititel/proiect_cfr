@@ -76,7 +76,7 @@ public class TrenDAO {
     
     public TrenModel getTrenById(String trenId) {
         TrenModel tren = null;
-        String sql = "SELECT * FROM trenuri WHERE id = ?";
+        String sql = "SELECT * FROM trenuri WHERE tren_id = ?";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -138,6 +138,40 @@ public class TrenDAO {
 
         return listaTrenuri;
     }
+    
+    public TrenModel getTrenByNumar(String numarTren) {
+        TrenModel tren = null;
+        String sql = "SELECT * FROM trenuri WHERE numar_tren = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, numarTren);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                tren = new TrenModel(
+                    rs.getInt("tren_id"),
+                    rs.getString("numar_tren"),
+                    rs.getString("nume"),
+                    rs.getString("ora_plecare"),
+                    rs.getString("durata"),
+                    rs.getString("statie_plecare"),
+                    rs.getString("statie_sosire"),
+                    rs.getDate("data").toLocalDate(),
+                    rs.getString("loc"),
+                    rs.getString("clasa"),
+                    rs.getDouble("pret")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Tratează excepțiile
+        }
+
+        return tren;
+    }
+
 }
 
    
