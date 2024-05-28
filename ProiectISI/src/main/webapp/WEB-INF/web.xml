@@ -19,4 +19,12 @@
     	<servlet-name>ObtineDateTrenServlet</servlet-name>
     	<url-pattern>/obtineDateTren</url-pattern>
 	</servlet-mapping>	
+	<servlet>
+    <servlet-name>vizualizareBilete</servlet-name>
+    <servlet-class>com.example.proiectisi.controller.VizualizareBileteServlet</servlet-class>
+    </servlet>
+    	<servlet-mapping>
+    	<servlet-name>vizualizareBilete</servlet-name>
+    	<url-pattern>/vizualizareBilete</url-pattern>
+	</servlet-mapping>
 </web-app>

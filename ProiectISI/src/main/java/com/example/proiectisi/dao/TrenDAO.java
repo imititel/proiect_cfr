@@ -30,14 +30,14 @@ public class TrenDAO {
     public List<TrenModel> cautaTrenuri(String deLa, String panaLa, String data) {
         List<TrenModel> trenuri = new ArrayList<>();
         
-        String sql = "SELECT * FROM trenuri WHERE statie_plecare = ? AND statie_sosire = ? AND data >= ?";
+        String sql = "SELECT * FROM trenuri WHERE statie_plecare = ? AND statie_sosire = ? AND data = ?";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             
             preparedStatement.setString(1, deLa);
             preparedStatement.setString(2, panaLa);
-         // Verifică și validează formatul datei
+
             try {
                 java.sql.Date sqlDate = java.sql.Date.valueOf(data);
                 preparedStatement.setDate(3, sqlDate);
@@ -45,7 +45,9 @@ public class TrenDAO {
                 System.err.println("Formatul datei este incorect: " + data);
                 return trenuri;
             }
-            
+
+            System.out.println("Execut SQL: " + preparedStatement);
+
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
@@ -67,7 +69,6 @@ public class TrenDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Tratarea erorilor de conexiune și interogare
         }
 
         return trenuri;

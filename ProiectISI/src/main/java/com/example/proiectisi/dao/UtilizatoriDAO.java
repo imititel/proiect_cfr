@@ -65,49 +65,68 @@ public class UtilizatoriDAO {
         
         return status;
     }
+    
+    public boolean isValidCodf(String codf) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM functie WHERE codf = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, codf);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
 
     public boolean insert(UtilizatoriModel utilizatoriModel, Object user) throws ClassNotFoundException, SQLException {
-        boolean status = true;
-        PreparedStatement preparedStatement = dataSource.getConnection()
-                .prepareStatement("INSERT INTO utilizatori(username, password, codf) VALUES (?, ?, ?);");
-        preparedStatement.setString(1, utilizatoriModel.getUsername());
-        preparedStatement.setString(2, utilizatoriModel.getPassword());
-        preparedStatement.setString(3, utilizatoriModel.getCodf());
+        boolean status = false;
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO utilizatori(username, password, codf) VALUES (?, ?, ?);")) {
+            
+            preparedStatement.setString(1, utilizatoriModel.getUsername());
+            preparedStatement.setString(2, utilizatoriModel.getPassword());
+            preparedStatement.setString(3, utilizatoriModel.getCodf());
 
-        System.out.println(preparedStatement);
-        if (preparedStatement.execute())
-            return true;
+            int affectedRows = preparedStatement.executeUpdate();
+            status = affectedRows > 0;
 
-        logsDAO.logs(user, preparedStatement.toString());
-
+            // Log the action
+            logAction(connection, user != null ? user.toString() : "unknown", "insert", preparedStatement.toString(), utilizatoriModel.getCodf());
+        }
         return status;
     }
 
     public boolean update(UtilizatoriModel utilizatoriModel, String userid, Object user) throws ClassNotFoundException, SQLException {
-        boolean status = true;
-        PreparedStatement preparedStatement = dataSource.getConnection()
-                .prepareStatement("UPDATE utilizatori SET username = ?, password = ?, codf = ? WHERE userid = ?;");
-        preparedStatement.setString(1, utilizatoriModel.getUsername());
-        preparedStatement.setString(2, utilizatoriModel.getPassword());
-        preparedStatement.setString(3, utilizatoriModel.getCodf());
-        preparedStatement.setString(4, userid);
+        boolean status = false;
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE utilizatori SET username = ?, password = ?, codf = ? WHERE userid = ?;")) {
+            
+            preparedStatement.setString(1, utilizatoriModel.getUsername());
+            preparedStatement.setString(2, utilizatoriModel.getPassword());
+            preparedStatement.setString(3, utilizatoriModel.getCodf());
+            preparedStatement.setString(4, userid);
 
-        System.out.println(preparedStatement);
-        if (preparedStatement.execute())
-            return true;
+            int affectedRows = preparedStatement.executeUpdate();
+            status = affectedRows > 0;
 
-        logsDAO.logs(user, preparedStatement.toString());
-
+            // Log the action
+            logAction(connection, user != null ? user.toString() : "unknown", "update", preparedStatement.toString(), utilizatoriModel.getCodf());
+        }
         return status;
     }
 
     public void delete(String userid, Object user) throws SQLException {
-        PreparedStatement preparedStatement = dataSource.getConnection()
-                .prepareStatement("DELETE FROM utilizatori where userid = ?;");
-        preparedStatement.setString(1, userid);
-        preparedStatement.execute();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM utilizatori WHERE userid = ?;")) {
+            
+            preparedStatement.setString(1, userid);
+            preparedStatement.executeUpdate();
 
-        logsDAO.logs(user, preparedStatement.toString());
+            // Log the action
+            logAction(connection, user != null ? user.toString() : "unknown", "delete", preparedStatement.toString(), "-1");
+        }
     }
 
     public int getCodf(Object userObject) throws SQLException {
@@ -149,5 +168,22 @@ public class UtilizatoriDAO {
         }
         
         return false;
+    }
+    
+    private void logAction(Connection connection, String username, String action, String command, String codf) throws SQLException {
+        // Validate codf
+        if (!isValidCodf(codf)) {
+            System.out.println("Invalid codf value for logging.");
+            return;
+        }
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO logs (username, actiune, comanda, datal, oral, codf) VALUES (?, ?, ?, CURRENT_DATE, CURRENT_TIME, ?)")) {
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, action);
+            preparedStatement.setString(3, command);
+            preparedStatement.setString(4, codf);
+
+            preparedStatement.executeUpdate();
+        }
     }
 }

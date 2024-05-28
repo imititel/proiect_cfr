@@ -1,6 +1,9 @@
 package com.example.proiectisi.dao;
 
 import com.example.proiectisi.model.BiletModel;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,30 +12,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BiletDAO {
+    private final HikariDataSource dataSource;
 
-    private Connection connection;
+    public BiletDAO() {
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl("jdbc:mysql://localhost:3306/proiect_cfr");
+        config.setUsername("admin");
+        config.setPassword("intel123");
+        config.setMaximumPoolSize(10);
+        config.setIdleTimeout(600000);
+        config.setMaxLifetime(1800000);
 
-    public BiletDAO(Connection connection) {
-        this.connection = connection;
+        dataSource = new HikariDataSource(config);
     }
 
     public List<BiletModel> getAllBilete() throws SQLException {
         List<BiletModel> bilete = new ArrayList<>();
-        String query = "SELECT * FROM bilete"; // Presupunând că aveți o tabelă "bilete"
-        PreparedStatement preparedStatement = connection.prepareStatement(query);
-        ResultSet resultSet = preparedStatement.executeQuery();
-
-        while (resultSet.next()) {
-            BiletModel bilet = new BiletModel();
-            // Setează atributele biletului aici, de exemplu:
-            // bilet.setId(resultSet.getInt("id"));
-            // bilet.setNume(resultSet.getString("nume"));
-            // ...
-            bilete.add(bilet);
+        String sql = "SELECT * FROM bilete";
+        
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet rs = preparedStatement.executeQuery()) {
+            
+            while (rs.next()) {
+                BiletModel bilet = new BiletModel();
+                bilet.setBiletId(rs.getInt("bilet_id"));
+                bilet.setNumeCalator(rs.getString("nume_calator"));
+                bilet.setNumarTren(rs.getString("numar_tren"));
+                bilet.setStatiePlecare(rs.getString("statie_plecare"));
+                bilet.setStatieSosire(rs.getString("statie_sosire"));
+                bilet.setData(rs.getString("data"));
+                bilet.setOra(rs.getString("ora"));
+                bilet.setLoc(rs.getString("loc"));
+                bilet.setClasa(rs.getString("clasa"));
+                bilet.setPret(rs.getDouble("pret"));
+                bilete.add(bilet);
+            }
         }
-
         return bilete;
     }
-
-    // Alte metode pentru operațiuni CRUD
 }
