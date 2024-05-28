@@ -11,9 +11,9 @@
 <html>
 <head>
 
-	<% 
-	Logger logger = Logger.getLogger("ManagerLog");
-	%>
+    <% 
+    Logger logger = Logger.getLogger("ManagerLog");
+    %>
     <title>Management Utilizatori</title>
     <style>
         body {
@@ -48,6 +48,21 @@
         .form-container {
             margin-top: 20px;
         }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -56,9 +71,9 @@
     <h2>Lista Utilizatori</h2>
     <%
         UtilizatoriDAO dao = new UtilizatoriDAO();
-    	List<UtilizatoriModel> listaUtilizatori = dao.getAllUtilizatori();
-    	%>
-    	<table border="1">
+        List<UtilizatoriModel> listaUtilizatori = dao.getAllUtilizatori();
+    %>
+    <table border="1">
         <tr>
             <th>ID</th>
             <th>Username</th>
@@ -94,6 +109,9 @@
             }
         %>
     </table>
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="vizualizareBilete" class="btn">Vizualizează Bilete Vândute</a>
+    </div>
 </div>
 
 <head>
@@ -148,7 +166,7 @@
     .form-group input[type="submit"]:hover {
         background-color: #0056b3;
     }
-	</style>
+    </style>
 </head>
 <body>
 
@@ -224,7 +242,7 @@ if (username != null && password != null && codf != null) {
         boolean updateSuccessful = dao.update(updatedUser, id, user);
 
         if (updateSuccessful) {
-        	response.sendRedirect("manager.jsp");
+            response.sendRedirect("manager.jsp");
             logger.info("<p>User updated successfully.</p>");
         } else {
             logger.warning("<p>Error updating user.</p>");

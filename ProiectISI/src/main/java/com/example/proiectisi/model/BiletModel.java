@@ -1,56 +1,95 @@
 package com.example.proiectisi.model;
 
 public class BiletModel {
-    private int id;
-    private String destinatie;
-    private String dataPlecare;
+    private int biletId;
+    private String numeCalator;
+    private String numarTren;
+    private String statiePlecare;
+    private String statieSosire;
+    private String data;
+    private String ora;
+    private String loc;
+    private String clasa;
     private double pret;
 
-    // Constructor fără parametri
-    public BiletModel() {
+    // Getters and setters
+    public int getBiletId() {
+        return biletId;
     }
 
-    // Constructor cu parametri
-    public BiletModel(int id, String destinatie, String dataPlecare, double pret) {
-        this.id = id;
-        this.destinatie = destinatie;
-        this.dataPlecare = dataPlecare;
-        this.pret = pret;
+    public void setBiletId(int biletId) {
+        this.biletId = biletId;
     }
 
-    // Getteri
-    public int getId() {
-        return id;
+    public String getNumeCalator() {
+        return numeCalator;
     }
 
-    public String getDestinatie() {
-        return destinatie;
+    public void setNumeCalator(String numeCalator) {
+        this.numeCalator = numeCalator;
     }
 
-    public String getDataPlecare() {
-        return dataPlecare;
+    public String getNumarTren() {
+        return numarTren;
+    }
+
+    public void setNumarTren(String numarTren) {
+        this.numarTren = numarTren;
+    }
+
+    public String getStatiePlecare() {
+        return statiePlecare;
+    }
+
+    public void setStatiePlecare(String statiePlecare) {
+        this.statiePlecare = statiePlecare;
+    }
+
+    public String getStatieSosire() {
+        return statieSosire;
+    }
+
+    public void setStatieSosire(String statieSosire) {
+        this.statieSosire = statieSosire;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public String getOra() {
+        return ora;
+    }
+
+    public void setOra(String ora) {
+        this.ora = ora;
+    }
+
+    public String getLoc() {
+        return loc;
+    }
+
+    public void setLoc(String loc) {
+        this.loc = loc;
+    }
+
+    public String getClasa() {
+        return clasa;
+    }
+
+    public void setClasa(String clasa) {
+        this.clasa = clasa;
     }
 
     public double getPret() {
         return pret;
     }
 
-    // Setteri
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setDestinatie(String destinatie) {
-        this.destinatie = destinatie;
-    }
-
-    public void setDataPlecare(String dataPlecare) {
-        this.dataPlecare = dataPlecare;
-    }
-
     public void setPret(double pret) {
         this.pret = pret;
     }
-
-    // Alte metode necesare...
 }

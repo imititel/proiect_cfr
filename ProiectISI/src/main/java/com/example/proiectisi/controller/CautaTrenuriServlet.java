@@ -14,7 +14,7 @@ import java.util.List;
 public class CautaTrenuriServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {    
         CriteriiCautareTrenModel criterii = new CriteriiCautareTrenModel();
         criterii.setDeLa(request.getParameter("from"));
         criterii.setPanaLa(request.getParameter("to"));

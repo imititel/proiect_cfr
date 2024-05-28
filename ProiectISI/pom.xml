@@ -68,6 +68,11 @@
 			<artifactId>itextpdf</artifactId>
 			<version>5.5.13.2</version>
 		</dependency>
+		<dependency>
+    		<groupId>commons-daemon</groupId>
+    		<artifactId>commons-daemon</artifactId>
+    		<version>1.2.4</version>
+		</dependency>
 	</dependencies>
 
 	<build>
