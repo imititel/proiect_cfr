@@ -8,6 +8,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet(name = "cautaTrenuri", value = "/cautaTrenuri")
@@ -29,7 +30,13 @@ public class CautaTrenuriServlet extends HttpServlet {
             return; 
         }
 
-        TrenDAO trenDAO = new TrenDAO();
+        TrenDAO trenDAO = null;
+		try {
+			trenDAO = new TrenDAO();
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         try {
             List<TrenModel> trenuri = trenDAO.cautaTrenuri(criterii.getDeLa(), criterii.getPanaLa(), criterii.getData());
 

@@ -13,6 +13,7 @@ public class TrenModel {
     private String loc;
     private String clasa;
     private double pret;
+    private int id;
 
     // Constructor cu toate câmpurile
     public TrenModel(int trenId, String numarTren, String nume, String oraPlecare, 
@@ -118,6 +119,14 @@ public class TrenModel {
 
     public void setPret(double pret) {
         this.pret = pret;
+    }
+    
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
     
 }

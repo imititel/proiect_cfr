@@ -1,21 +1,32 @@
 package com.example.proiectisi.controller;
 
 import com.example.proiectisi.dao.UtilizatoriDAO;
-import com.example.proiectisi.model.UtilizatoriModel;
+import com.example.proiectisi.dao.TrenDAO;
+import com.example.proiectisi.dao.LogsDAO;
+import com.example.proiectisi.model.LogModel;
+import com.example.proiectisi.model.ReportModel;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLException;
-import java.util.Objects;
+import java.util.List;
 
 @WebServlet(name = "utilizatori", value = "/utilizatori")
 public class UtilizatoriServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     UtilizatoriDAO utilizatoriDAO;
+    private TrenDAO trenDAO;
+    private LogsDAO logsDAO;
+
+    public UtilizatoriServlet() throws SQLException, ClassNotFoundException {
+        this.trenDAO = new TrenDAO();
+        this.logsDAO = new LogsDAO();
+    }
 
     public void init() {
         try {
@@ -25,53 +36,23 @@ public class UtilizatoriServlet extends HttpServlet {
         }
     }
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession();
-        Object user = session.getAttribute("user");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+        if ("filter".equals(action)) {
+            String tren = request.getParameter("tren");
+            String utilizator = request.getParameter("utilizator");
+            Date dataInceput = Date.valueOf(request.getParameter("dataInceput"));
+            Date dataSfarsit = Date.valueOf(request.getParameter("dataSfarsit"));
 
-        if (Objects.equals(request.getParameter("action"), "delete")) {
-            try {
-                utilizatoriDAO.delete(request.getParameter("userid"), user);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            List<LogModel> logs = logsDAO.filterLogs(tren, utilizator, dataInceput, dataSfarsit);
+            request.setAttribute("logs", logs);
+        } else if ("report".equals(action)) {
+            Date dataInceput = Date.valueOf(request.getParameter("reportDataInceput"));
+            Date dataSfarsit = Date.valueOf(request.getParameter("reportDataSfarsit"));
+
+            List<ReportModel> reports = trenDAO.generateReports(dataInceput, dataSfarsit);
+            request.setAttribute("reports", reports);
         }
-        response.sendRedirect("utilizatori.jsp");
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-
-        UtilizatoriModel utilizatoriModel = new UtilizatoriModel();
-        utilizatoriModel.setUsername(username);
-        utilizatoriModel.setPassword(password);
-
-        HttpSession session = request.getSession();
-        Object user = session.getAttribute("user");
-
-        if (Objects.equals(request.getParameter("action"), "edit")) {
-            try {
-                if (utilizatoriDAO.update(utilizatoriModel, request.getParameter("userid"), user)) {
-                    response.sendRedirect("utilizatori.jsp");
-                } else {
-                    response.sendRedirect("index.jsp");
-                }
-            } catch (ClassNotFoundException | SQLException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                if (utilizatoriDAO.insert(utilizatoriModel, user)) {
-                    response.sendRedirect("utilizatori.jsp");
-                } else {
-                    response.sendRedirect("index.jsp");
-                }
-            } catch (ClassNotFoundException | SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        request.getRequestDispatcher("manager.jsp").forward(request, response);
     }
 }

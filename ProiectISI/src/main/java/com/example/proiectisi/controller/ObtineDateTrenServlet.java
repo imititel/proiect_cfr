@@ -6,13 +6,14 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet("/obtine_date_tren")
 public class ObtineDateTrenServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final TrenDAO trenDAO; // Adăugați o referință la TrenDAO
 
-    public ObtineDateTrenServlet() {
+    public ObtineDateTrenServlet() throws ClassNotFoundException, SQLException {
         trenDAO = new TrenDAO(); // Inițializați TrenDAO în constructor
     }
 
