@@ -27,4 +27,14 @@
     	<servlet-name>vizualizareBilete</servlet-name>
     	<url-pattern>/vizualizareBilete</url-pattern>
 	</servlet-mapping>
+	<servlet>
+        <servlet-name>UtilizatoriServlet</servlet-name>
+        <servlet-class>com.example.proiectisi.controller.UtilizatoriServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>UtilizatoriServlet</servlet-name>
+        <url-pattern>/UtilizatoriServlet</url-pattern>
+    </servlet-mapping>
+    
 </web-app>

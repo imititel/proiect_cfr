@@ -3,17 +3,17 @@
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="com.example.proiectisi.dao.UtilizatoriDAO" %>
 <%@ page import="com.example.proiectisi.model.UtilizatoriModel" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.logging.Logger" %>
 <%@ page import="java.util.logging.Level" %>
 <%@ include file="head.html" %>
 
+<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<!DOCTYPE html>
 <html>
 <head>
-
-    <% 
-    Logger logger = Logger.getLogger("ManagerLog");
-    %>
+    <meta charset="UTF-8">
     <title>Management Utilizatori</title>
     <style>
         body {
@@ -70,6 +70,7 @@
 <div class="container">
     <h2>Lista Utilizatori</h2>
     <%
+        Logger logger = Logger.getLogger("ManagerLog");
         UtilizatoriDAO dao = new UtilizatoriDAO();
         List<UtilizatoriModel> listaUtilizatori = dao.getAllUtilizatori();
     %>
@@ -114,88 +115,29 @@
     </div>
 </div>
 
-<head>
-    <title>Adauga Utilizator CFR</title>
-    <style>
-    /* CSS Styles */
-    .container {
-        /* existing styles... */
-    }
-
-    .form-container {
-        background-color: #f8f8f8;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        width: 50%; /* Adjust the width of the form container */
-        margin: auto; /* Center the container */
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    .form-group input[type="text"],
-    .form-group input[type="password"] {
-        width: 100%; /* Full width of the form-group */
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 0.9em; /* Adjust font size if needed */
-    }
-
-    .form-group .form-text {
-        font-size: 0.8em; /* Slightly smaller font for descriptions */
-        color: #666;
-    }
-
-    .form-group input[type="submit"] {
-        background-color: #007bff;
-        color: white;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .form-group input[type="submit"]:hover {
-        background-color: #0056b3;
-    }
-    </style>
-</head>
-<body>
-
-    <!-- Form HTML -->
-    <div class="container form-container">
-        <h2>Adaugă Utilizator Nou</h2>
-        <form action="manager.jsp" method="post">
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Parola:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <div class="form-group">
-                <label for="codf">Cod Funcție CFR:</label>
-                <input type="text" id="codf" name="codf" required>
-                <small class="form-text">
-                    Coduri: 1 - Manager CFR, 2 - Casier CFR, 3 - Client
-                </small>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Adaugă">
-            </div>
-        </form>
-    </div>
-
-</body>
+<div class="container form-container">
+    <h2>Adaugă Utilizator Nou</h2>
+    <form action="manager.jsp" method="post">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Parola:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div class="form-group">
+            <label for="codf">Cod Funcție CFR:</label>
+            <input type="text" id="codf" name="codf" required>
+            <small class="form-text">
+                Coduri: 1 - Manager CFR, 2 - Casier CFR, 3 - Client
+            </small>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Adaugă">
+        </div>
+    </form>
+</div>
 
 <%
 String action = request.getParameter("action");
@@ -205,33 +147,28 @@ String codf = request.getParameter("codf");
 Object user = null;
 
 if (username != null && password != null && codf != null) {
-    // Create a new user model
     UtilizatoriModel newUser = new UtilizatoriModel();
     newUser.setUsername(username);
     newUser.setPassword(password);
     newUser.setCodf(codf);
 
-    // Check if the username is already taken
     boolean usernameTaken = dao.isUsernameTaken(username);
-    
+
     if (usernameTaken) {
-        // Username is already taken, display an error message
         response.sendRedirect("user_already_taken.jsp?message=Username already taken");
-        logger.warning("<p>Username already taken.</p>");
+        logger.warning("Username already taken.");
     } else {
-        // Insert the new user
         boolean insertSuccessful = dao.insert(newUser, user);
 
         if (insertSuccessful) {
             response.sendRedirect("manager.jsp");
-            logger.info("<p>New user added successfully.</p>");
+            logger.info("New user added successfully.");
         } else {
-            logger.warning("<p>Error adding new user.</p>");
+            logger.warning("Error adding new user.");
         }
     }
 } else if (action != null) {
     if (action.equals("edit")) {
-        // Obțineți datele din formular și apelați metoda pentru editare din UtilizatoriDAO
         String id = request.getParameter("id");
         String newUsername = request.getParameter("newUsername");
         String newPassword = request.getParameter("newPassword");
@@ -243,57 +180,107 @@ if (username != null && password != null && codf != null) {
 
         if (updateSuccessful) {
             response.sendRedirect("manager.jsp");
-            logger.info("<p>User updated successfully.</p>");
+            logger.info("User updated successfully.");
         } else {
-            logger.warning("<p>Error updating user.</p>");
+            logger.warning("Error updating user.");
         }
     } else if (action.equals("delete")) {
-        // Obțineți ID-ul utilizatorului și apelați metoda pentru ștergere din UtilizatoriDAO
         String id = request.getParameter("id");
 
-        // Call the delete method without trying to capture a return value
         dao.delete(id, user);
 
-        // Provide a success message since no return value is available
-        logger.info("<p>User deleted successfully.</p>");
+        logger.info("User deleted successfully.");
         response.sendRedirect("manager.jsp");
     }
 }
 %>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logout Button</title>
-    <style>
-        /* Stilurile CSS pentru buton */
-        .logout-button {
-            background-color: #ff0000;
-            color: #ffffff; 
-            padding: 10px 20px; 
-            border: none; 
-            border-radius: 5px;
-            cursor: pointer; 
-            position: absolute;
-            top: 10px;
-            right: 10px; 
-        }
+<div class="container form-container">
+    <h2>Filtrare</h2>
+    <form action="utilizatori" method="get">
+        <input type="hidden" name="action" value="filter">
+        <label for="tren">Tren:</label>
+        <input type="text" id="tren" name="tren">
 
-        .logout-button:hover {
-            background-color: #cc0000;
-        }
-    </style>
-</head>
-<body>
-    <button class="logout-button" onclick="logout()">Logout</button>
+        <label for="utilizator">Utilizator:</label>
+        <input type="text" id="utilizator" name="utilizator">
 
-    <script>
-        function logout() {
-            // Redirecționează către pagina principală (index.jsp)
-            window.location.href = "index.jsp";
-        }
-    </script>
-</body>
+        <label for="dataInceput">Data Inceput:</label>
+        <input type="date" id="dataInceput" name="dataInceput">
+
+        <label for="dataSfarsit">Data Sfarsit:</label>
+        <input type="date" id="dataSfarsit" name="dataSfarsit">
+
+        <button type="submit">Filtreaza</button>
+    </form>
+
+     <!-- Display Filter Results -->
+    <h2>Rezultate Filtrare</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID Tren</th>
+                <th>Nume Tren</th>
+                <th>ID Utilizator</th>
+                <th>Nume Utilizator</th>
+                <th>Data</th>
+                <th>Actiune</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach var="log" items="${logs}">
+                <tr>
+                    <td>${log.trenId}</td>
+                    <td>${log.trenName}</td>
+                    <td>${log.userId}</td>
+                    <td>${log.userName}</td>
+                    <td><fmt:formatDate value="${log.date}" pattern="yyyy-MM-dd" /></td>
+                    <td>${log.action}</td>
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
+</div>
+
+<div class="container form-container">
+    <h2>Generare Rapoarte</h2>
+    <form action="utilizatori" method="get">
+        <input type="hidden" name="action" value="report">
+        <label for="reportDataInceput">Data Inceput:</label>
+        <input type="date" id="reportDataInceput" name="reportDataInceput">
+
+        <label for="reportDataSfarsit">Data Sfarsit:</label>
+        <input type="date" id="reportDataSfarsit" name="reportDataSfarsit">
+
+        <button type="submit">Genereaza Raport</button>
+    </form>
+
+    <h2>Rezultate Raport</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID Tren</th>
+                <th>Nume Tren</th>
+                <th>ID Utilizator</th>
+                <th>Nume Utilizator</th>
+                <th>Numar Bilete</th>
+                <th>Total Vanzari</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach var="report" items="${reports}">
+                <tr>
+                    <td>${report.trenId}</td>
+                    <td>${report.trenName}</td>
+                    <td>${report.userId}</td>
+                    <td>${report.userName}</td>
+                    <td>${report.ticketCount}</td>
+                    <td>${report.totalSales}</td>
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>
