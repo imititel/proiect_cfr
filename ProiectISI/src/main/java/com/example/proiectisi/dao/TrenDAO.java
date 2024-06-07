@@ -208,12 +208,11 @@ public class TrenDAO {
 
     public List<ReportModel> generateReports(Date dataInceput, Date dataSfarsit) {
         List<ReportModel> reports = new ArrayList<>();
-        String sql = "SELECT t.tren_id AS trenId, t.nume AS trenName, u.id AS userId, u.nume AS userName, COUNT(b.id) AS ticketCount, SUM(b.pret) AS totalSales " +
-                     "FROM bilet b " +
-                     "JOIN trenuri t ON b.tren_id = t.tren_id " +
-                     "JOIN utilizatori u ON b.utilizator_id = u.id " +
+        String sql = "SELECT t.tren_id AS trenId, t.nume AS trenName, COUNT(b.bilet_id) AS ticketCount, SUM(b.pret) AS totalSales " +
+                     "FROM bilete b " +
+                     "JOIN trenuri t ON b.numar_tren = t.numar_tren " +
                      "WHERE b.data BETWEEN ? AND ? " +
-                     "GROUP BY t.tren_id, t.nume, u.id, u.nume";
+                     "GROUP BY t.tren_id, t.nume";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setDate(1, dataInceput);
             ps.setDate(2, dataSfarsit);
@@ -222,8 +221,6 @@ public class TrenDAO {
                     ReportModel reportModel = new ReportModel();
                     reportModel.setTrenId(rs.getInt("trenId"));
                     reportModel.setTrenName(rs.getString("trenName"));
-                    reportModel.setUserId(rs.getInt("userId"));
-                    reportModel.setUserName(rs.getString("userName"));
                     reportModel.setTicketCount(rs.getInt("ticketCount"));
                     reportModel.setTotalSales(rs.getDouble("totalSales"));
                     reports.add(reportModel);

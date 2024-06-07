@@ -221,8 +221,6 @@ if (username != null && password != null && codf != null) {
             <tr>
                 <th>ID Tren</th>
                 <th>Nume Tren</th>
-                <th>ID Utilizator</th>
-                <th>Nume Utilizator</th>
                 <th>Data</th>
                 <th>Actiune</th>
             </tr>
@@ -232,8 +230,6 @@ if (username != null && password != null && codf != null) {
                 <tr>
                     <td>${log.trenId}</td>
                     <td>${log.trenName}</td>
-                    <td>${log.userId}</td>
-                    <td>${log.userName}</td>
                     <td><fmt:formatDate value="${log.date}" pattern="yyyy-MM-dd" /></td>
                     <td>${log.action}</td>
                 </tr>
@@ -261,8 +257,6 @@ if (username != null && password != null && codf != null) {
             <tr>
                 <th>ID Tren</th>
                 <th>Nume Tren</th>
-                <th>ID Utilizator</th>
-                <th>Nume Utilizator</th>
                 <th>Numar Bilete</th>
                 <th>Total Vanzari</th>
             </tr>
@@ -272,8 +266,6 @@ if (username != null && password != null && codf != null) {
                 <tr>
                     <td>${report.trenId}</td>
                     <td>${report.trenName}</td>
-                    <td>${report.userId}</td>
-                    <td>${report.userName}</td>
                     <td>${report.ticketCount}</td>
                     <td>${report.totalSales}</td>
                 </tr>
