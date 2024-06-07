@@ -38,20 +38,23 @@ public class UtilizatoriServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
+        System.out.println("Action: " + action);
         if ("filter".equals(action)) {
             String tren = request.getParameter("tren");
             String utilizator = request.getParameter("utilizator");
             Date dataInceput = Date.valueOf(request.getParameter("dataInceput"));
             Date dataSfarsit = Date.valueOf(request.getParameter("dataSfarsit"));
-
+            System.out.println("Filter Params: Tren=" + tren + ", Utilizator=" + utilizator + ", DataInceput=" + dataInceput + ", DataSfarsit=" + dataSfarsit);
             List<LogModel> logs = logsDAO.filterLogs(tren, utilizator, dataInceput, dataSfarsit);
             request.setAttribute("logs", logs);
+            System.out.println("Logs found: " + logs.size());
         } else if ("report".equals(action)) {
             Date dataInceput = Date.valueOf(request.getParameter("reportDataInceput"));
             Date dataSfarsit = Date.valueOf(request.getParameter("reportDataSfarsit"));
-
+            System.out.println("Report Params: DataInceput=" + dataInceput + ", DataSfarsit=" + dataSfarsit);
             List<ReportModel> reports = trenDAO.generateReports(dataInceput, dataSfarsit);
             request.setAttribute("reports", reports);
+            System.out.println("Reports found: " + reports.size());
         }
         request.getRequestDispatcher("manager.jsp").forward(request, response);
     }
