@@ -177,7 +177,7 @@
 
         <button type="button" onclick="swapValues()">Inversează</button><br><br>
 
-        <label for="departure">Data plecare (yyyy-MM-dd):</label>
+        <label for="departure">Data plecare (MM-dd-yyyy):</label>
 		<input type="date" id="departure" name="departure" value="<%= new SimpleDateFormat("yyyy-MM-dd").format(new Date()) %>"><br><br>
 
         <input type="submit" value="Caută">

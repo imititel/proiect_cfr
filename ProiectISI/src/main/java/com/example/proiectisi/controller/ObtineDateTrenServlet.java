@@ -1,7 +1,8 @@
 package com.example.proiectisi.controller;
 
-import com.example.proiectisi.dao.TrenDAO;
-import com.example.proiectisi.model.TrenModel;
+import com.example.proiectisi.dao.BiletDAO;
+import com.example.proiectisi.model.BiletModel;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -11,41 +12,42 @@ import java.sql.SQLException;
 @WebServlet("/obtine_date_tren")
 public class ObtineDateTrenServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private final TrenDAO trenDAO; // Adăugați o referință la TrenDAO
+    private final BiletDAO biletDAO;
 
     public ObtineDateTrenServlet() throws ClassNotFoundException, SQLException {
-        trenDAO = new TrenDAO(); // Inițializați TrenDAO în constructor
+        biletDAO = new BiletDAO();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Obțineți parametrul "numar_tren" din cerere
         String trenSelectatId = request.getParameter("numar_tren");
 
-        // Verificați dacă parametrul "numar_tren" este valid și tratați erorile dacă este necesar
         if (trenSelectatId == null || trenSelectatId.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("Număr tren invalid.");
             return;
         }
 
-        // Apelați metoda getTrenByNumar din TrenDAO pentru a obține datele trenului
-        // Notă: Asigurați-vă că metoda există în TrenDAO și că poate gestiona căutarea după numărul trenului
-        TrenModel tren = trenDAO.getTrenByNumar(trenSelectatId);
+        BiletModel bilet = biletDAO.getBiletByNumarTren(trenSelectatId);
 
-        // Verificați dacă trenul a fost găsit sau nu
-        if (tren == null) {
+        if (bilet == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             response.getWriter().write("Trenul cu numărul specificat nu a fost găsit.");
             return;
         }
 
-        // Convertiți obiectul TrenModel în format JSON
-        String jsonResponse = "{\"nume\": \"" + tren.getNume() + "\", \"loc\": \"" + tren.getLoc() + "\", \"clasa\": \"" + tren.getClasa() + "\", \"pret\": " + tren.getPret() + "}";
+        String jsonResponse = "{"
+                + "\"nume_calator\": \"" + bilet.getNumeCalator() + "\","
+                + "\"numar_tren\": \"" + bilet.getNumarTren() + "\","
+                + "\"statie_plecare\": \"" + bilet.getStatiePlecare() + "\","
+                + "\"statie_sosire\": \"" + bilet.getStatieSosire() + "\","
+                + "\"data\": \"" + bilet.getData() + "\","
+                + "\"ora\": \"" + bilet.getOra() + "\","
+                + "\"loc\": \"" + bilet.getLoc() + "\","
+                + "\"clasa\": \"" + bilet.getClasa() + "\","
+                + "\"pret\": " + bilet.getPret()
+                + "}";
 
-        // Setăm tipul de conținut al răspunsului la JSON
         response.setContentType("application/json");
-
-        // Trimitem răspunsul JSON înapoi la client
         response.getWriter().write(jsonResponse);
     }
 }

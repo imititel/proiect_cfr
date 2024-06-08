@@ -18,7 +18,7 @@ public class UtilizatoriDAO {
         config.setJdbcUrl("jdbc:mysql://localhost:3306/proiect_cfr");
         config.setUsername("admin");
         config.setPassword("intel123");
-        config.setMaximumPoolSize(10);
+        config.setMaximumPoolSize(20);
         config.setIdleTimeout(600000); // 10 minutes idle timeout
         config.setMaxLifetime(1800000); // 30 minutes maximum life of the connection
 

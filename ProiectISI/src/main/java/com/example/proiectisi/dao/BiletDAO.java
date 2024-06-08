@@ -14,7 +14,7 @@ import java.util.List;
 public class BiletDAO {
     private final HikariDataSource dataSource;
 
-    public BiletDAO() {
+    public BiletDAO() throws SQLException, ClassNotFoundException {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl("jdbc:mysql://localhost:3306/proiect_cfr");
         config.setUsername("admin");
@@ -26,26 +26,58 @@ public class BiletDAO {
         dataSource = new HikariDataSource(config);
     }
 
+    public BiletModel getBiletByNumarTren(String numarTren) {
+        BiletModel bilet = null;
+        String sql = "SELECT * FROM bilete WHERE numar_tren = ? LIMIT 1";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, numarTren);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                bilet = new BiletModel(
+                    rs.getInt("bilet_id"),
+                    rs.getString("nume_calator"),
+                    rs.getString("numar_tren"),
+                    rs.getString("statie_plecare"),
+                    rs.getString("statie_sosire"),
+                    rs.getDate("data"),
+                    rs.getTime("ora"),
+                    rs.getString("loc"),
+                    rs.getString("clasa"),
+                    rs.getDouble("pret")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return bilet;
+    }
+
     public List<BiletModel> getAllBilete() throws SQLException {
         List<BiletModel> bilete = new ArrayList<>();
         String sql = "SELECT * FROM bilete";
-        
+
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
              ResultSet rs = preparedStatement.executeQuery()) {
-            
+
             while (rs.next()) {
-                BiletModel bilet = new BiletModel();
-                bilet.setBiletId(rs.getInt("bilet_id"));
-                bilet.setNumeCalator(rs.getString("nume_calator"));
-                bilet.setNumarTren(rs.getString("numar_tren"));
-                bilet.setStatiePlecare(rs.getString("statie_plecare"));
-                bilet.setStatieSosire(rs.getString("statie_sosire"));
-                bilet.setData(rs.getString("data"));
-                bilet.setOra(rs.getString("ora"));
-                bilet.setLoc(rs.getString("loc"));
-                bilet.setClasa(rs.getString("clasa"));
-                bilet.setPret(rs.getDouble("pret"));
+                BiletModel bilet = new BiletModel(
+                    rs.getInt("bilet_id"),
+                    rs.getString("nume_calator"),
+                    rs.getString("numar_tren"),
+                    rs.getString("statie_plecare"),
+                    rs.getString("statie_sosire"),
+                    rs.getDate("data"),
+                    rs.getTime("ora"),
+                    rs.getString("loc"),
+                    rs.getString("clasa"),
+                    rs.getDouble("pret")
+                );
                 bilete.add(bilet);
             }
         }

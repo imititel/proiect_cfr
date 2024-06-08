@@ -23,7 +23,7 @@ public class TrenDAO {
         config.setJdbcUrl("jdbc:mysql://localhost:3306/proiect_cfr");
         config.setUsername("admin");
         config.setPassword("intel123");
-        config.setMaximumPoolSize(10);
+        config.setMaximumPoolSize(30);
         config.setIdleTimeout(600000);
         config.setMaxLifetime(1800000);
 
