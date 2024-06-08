@@ -18,13 +18,13 @@ public class VizualizareBileteServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        BiletDAO biletDAO = new BiletDAO();
         try {
+            BiletDAO biletDAO = new BiletDAO();
             List<BiletModel> bilete = biletDAO.getAllBilete();
             request.setAttribute("bilete", bilete);
             RequestDispatcher dispatcher = request.getRequestDispatcher("pagina_bilete.jsp");
             dispatcher.forward(request, response);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             request.setAttribute("errorMessage", "Eroare la obținerea biletelor: " + e.getMessage());
             RequestDispatcher dispatcher = request.getRequestDispatcher("error_page.jsp");
