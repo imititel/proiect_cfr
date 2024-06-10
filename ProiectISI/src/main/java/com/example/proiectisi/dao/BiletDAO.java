@@ -79,7 +79,10 @@ public class BiletDAO {
                     rs.getDouble("pret")
                 );
                 bilete.add(bilet);
+                System.out.println("Bilet găsit: " + bilet.getBiletId() + " " + bilet.getNumeCalator());
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return bilete;
     }
