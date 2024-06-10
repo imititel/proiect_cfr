@@ -1,6 +1,7 @@
 <!-- pagina_bilete.jsp -->
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.*, com.example.proiectisi.model.BiletModel" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <html>
 <head>
@@ -58,7 +59,7 @@
         </tr>
         <%
             List<BiletModel> bilete = (List<BiletModel>) request.getAttribute("bilete");
-            if (bilete != null) {
+            if (bilete != null && !bilete.isEmpty()) {
                 for (BiletModel bilet : bilete) {
         %>
         <tr>
@@ -67,7 +68,7 @@
             <td><%= bilet.getNumarTren() %></td>
             <td><%= bilet.getStatiePlecare() %></td>
             <td><%= bilet.getStatieSosire() %></td>
-            <td><%= bilet.getData() %></td>
+            <td><fmt:formatDate value="<%= bilet.getData() %>" pattern="yyyy-MM-dd" /></td>
             <td><%= bilet.getOra() %></td>
             <td><%= bilet.getLoc() %></td>
             <td><%= bilet.getClasa() %></td>
